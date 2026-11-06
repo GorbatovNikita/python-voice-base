@@ -7,11 +7,8 @@ class Transcription:
 
     def get_obj(self):
         obj = jclass(
-            "ru.hck.voice.data.Transcription"
-        )()
-
-        obj.setAudioPath(self.audio_path)
-        obj.setContent(self.content)
+            "ru.hck.voice.database.entity.Transcription"
+        )(self.audio_path, self.content)
 
         return obj
 

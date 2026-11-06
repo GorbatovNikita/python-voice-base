@@ -2,13 +2,13 @@
 ## Структура интерфейсов
 
 ` исходные классы лежат в base/interface`
-
-У нас присутствуют 2 интерфейса:
  
  1. `WhisperBase`
  2. `LlamaBase`
+ 3. `Transcription`
+ 4. `TranscriptionRepository`
 
-Оба они подчиняются одному паттерну
+WhisperBase и LlamaBase подчиняются одному паттерну
 
 ```Python
 class Model:
@@ -26,6 +26,9 @@ class Model:
 ```
 
 `Оба интерфейса живут в строгом согласовании с Java логикой, так что видоизменять их не стоит, они не синхронизированы, просто описаны одинаково`
+
+Transcription и TranscriptionRepository это интерфейсы созданные для взаимодействия с базой данных из python модуля, примеры работы приведены ниже
+
 ### Конфигурационные атрибуты классов
 
 #### WhisperBase:
@@ -110,6 +113,24 @@ def generate(model_path: str, prompt: str) -> str:
 	model.release()
 	
 	return result
+
+```
+
+```Python
+from base.interface import transcription
+
+#Transcription и TranscriptionRepository
+
+def create_transcription(audio_path, content):
+
+	#Создаем класс репозитория который реализует взаимодействия с базой данных
+    transcription_repo = transcription.TranscriptionRepository()
+
+	#Создаем обьект который используется репозиторием
+    transcription_obj = transcription.Transcription(audio_path, content)
+
+	#Реализуем транзакцию в базу данных и возвращаем результат
+    return transcription_repo.insert(transcription_obj)
 
 ```
 # Предположительная логическая структура проекта
